@@ -9,12 +9,14 @@ line      : statement (NEWLINE | EOF) ;
 statement : varDeclaration # varDeclarationStatement
           | assignment     # assignmentStatement
           | print          # printStatement
-          | map            # mapStatement ;
+          | map            # mapStatement
+          | reduce         # reduceStatement ;
+
+varDeclaration : VAR assignment ;
 
 print : PRINT LPAREN expression RPAREN ;
 map : MAP LPAREN expression COMMA ID LAMBDA expression RPAREN ;
-
-varDeclaration : VAR assignment ;
+reduce : REDUCE LPAREN ID COMMA (INTLIT|DECLIT) COMMA ID ID LAMBDA expression RPAREN;
 
 assignment : ID ASSIGN expression
            | ID ASSIGN statement;
@@ -23,7 +25,6 @@ assignment : ID ASSIGN expression
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | left=expression operator=POWER right=expression               # binaryOperation
-           | value=expression AS targetType=type                           # typeConversion
            | LPAREN expression RPAREN                                      # parenExpression
            | LRANGE expression COMMA expression RRANGE                     # range
            | ID                                                            # varReference

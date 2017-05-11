@@ -7,11 +7,10 @@ public class MrParserTest {
 
     @Test
     public void test() {
-        String query = "var a=1+2";
+        String query = "var sequence = map({0,n}, i -> (-1)^i / (2 * i + 1))";
         MrLexer lexer = new MrLexer(CharStreams.fromString(query));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MrParser parser = new MrParser(tokens);
-        parser.print();
         AstPrinter astPrinter = new AstPrinter();
         astPrinter.print(parser.mrFile());
     }

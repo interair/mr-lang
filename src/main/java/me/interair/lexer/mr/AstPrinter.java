@@ -26,9 +26,9 @@ public class AstPrinter {
             String ruleName = MrParser.ruleNames[ctx.getRuleIndex()];
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < indentation; i++) {
-                sb.append("  ");
+                sb.append("--|");
             }
-            log.info(sb.toString() + ruleName);
+            System.out.println(sb.toString() + ruleName + ": " + ctx.getText());
         }
         for (int i = 0; i < ctx.getChildCount(); i++) {
             ParseTree element = ctx.getChild(i);

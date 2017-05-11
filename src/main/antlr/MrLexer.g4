@@ -7,7 +7,6 @@ WS                 : [\t ]+ -> skip ;
 // Keywords
 VAR                : 'var' ;
 PRINT              : 'print';
-AS                 : 'as';
 INT                : 'Int';
 DECIMAL            : 'Decimal';
 MAP                : 'map';
