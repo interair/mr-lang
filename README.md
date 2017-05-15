@@ -1,5 +1,5 @@
 # mr-lang
-lexer/parser for simple expressions
+lexer/parser for simple expressions based on https://tomassetti.me/getting-started-with-antlr-building-a-simple-expression-language/
 
 example:
 ```
