@@ -46,7 +46,7 @@ public class TextEditor extends JFrame {
 
         setContentPane(cp);
         setTitle("Text Editor Demo");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
 

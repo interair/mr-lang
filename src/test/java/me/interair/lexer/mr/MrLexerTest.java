@@ -16,7 +16,7 @@ public class MrLexerTest {
         return new MrLexer(CharStreams.fromString(code));
     }
 
-    public List<String> tokens(MrLexer lexer) {
+    private List<String> tokens(MrLexer lexer) {
 
         List<String> tokens = new ArrayList<>();
         for (; ; ) {

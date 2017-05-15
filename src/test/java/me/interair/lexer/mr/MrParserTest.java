@@ -35,8 +35,8 @@ public class MrParserTest {
         MrLexer lexer = new MrLexer(CharStreams.fromString(query));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MrParser parser = new MrParser(tokens);
-//        AstPrinter astPrinter = new AstPrinter();
-//        astPrinter.print(parser.mrFile());
+        AstPrinter astPrinter = new AstPrinter();
+        astPrinter.print(parser.mrFile());
         return parser;
     }
 }

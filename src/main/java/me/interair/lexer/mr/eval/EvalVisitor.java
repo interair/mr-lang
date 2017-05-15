@@ -9,7 +9,7 @@ import java.util.Map;
 public class EvalVisitor extends MrParserBaseVisitor<Value> {
 
     // store variables (there's only one global scope!)
-    private Map<String, Value> memory = new HashMap<>();
+    private final Map<String, Value> memory = new HashMap<>();
 
     @Override
     public Value visitAssignment(MrParser.AssignmentContext ctx) {
