@@ -43,7 +43,7 @@ dependencies {
 
     antlr "org.antlr:antlr4:4.7"
     compile "org.antlr:antlr4-runtime:4.7"
-
+    compile 'com.fifesoft:rsyntaxtextarea:2.6.1'
     testCompile("junit:junit")
     testCompile("org.springframework:spring-test")
     testCompile("org.mockito:mockito-core:2.7.22")
@@ -52,7 +52,7 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "64m"
-    arguments += ['-package', 'me.interair.lexer.mr']
+    arguments += ['-visitor', '-package', 'me.interair.lexer.mr']
     outputDirectory = new File("${buildDir}/generated/src/me/interair/lexer/mr".toString())
 }
 compileJava.dependsOn generateGrammarSource

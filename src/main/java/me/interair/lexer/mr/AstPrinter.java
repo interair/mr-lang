@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 @Slf4j
-public class AstPrinter {
+class AstPrinter {
 
     private boolean ignoringWrappers = true;
 

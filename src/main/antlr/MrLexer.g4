@@ -2,7 +2,7 @@ lexer grammar MrLexer;
 
 // Whitespace
 NEWLINE            : '\r\n' | 'r' | '\n' ;
-WS                 : [\t ]+ -> skip ;
+WS                 : [ \t] -> channel(1);
 
 // Keywords
 VAR                : 'var' ;
@@ -32,3 +32,5 @@ COMMA              : ',' ;
 
 // Identifiers
 ID                 : [_]*[a-z][A-Za-z0-9_]* ;
+
+UNMATCHED : . -> channel(1);

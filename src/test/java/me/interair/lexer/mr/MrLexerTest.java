@@ -25,7 +25,7 @@ public class MrLexerTest {
                 return tokens;
             }
             if (token.getType() != MrLexer.WS) {
-                tokens.add(lexer.ruleNames[token.getType() - 1]);
+                tokens.add(MrLexer.ruleNames[token.getType() - 1]);
             }
         }
     }
