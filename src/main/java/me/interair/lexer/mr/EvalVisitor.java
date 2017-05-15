@@ -5,9 +5,6 @@ import java.util.Map;
 
 public class EvalVisitor extends MrParserBaseVisitor<Value> {
 
-    // used to compare floating point numbers
-    public static final double SMALL_VALUE = 0.00000000001;
-
     // store variables (there's only one global scope!)
     private Map<String, Value> memory = new HashMap<>();
 
