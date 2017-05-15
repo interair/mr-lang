@@ -1,4 +1,7 @@
-package me.interair.lexer.mr;
+package me.interair.lexer.mr.eval;
+
+import me.interair.lexer.mr.MrParser;
+import me.interair.lexer.mr.MrParserBaseVisitor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,12 +40,12 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
 
     @Override
     public Value visitIntLiteral(MrParser.IntLiteralContext ctx) {
-        return Value.longFromString(ctx.getText());
+        return Value.buildLong(ctx.getText());
     }
 
     @Override
     public Value visitDecimalLiteral(MrParser.DecimalLiteralContext ctx) {
-        return Value.doubleFromString(ctx.getText());
+        return Value.buildDouble(ctx.getText());
     }
 
 }

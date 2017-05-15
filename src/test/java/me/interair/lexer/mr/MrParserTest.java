@@ -1,8 +1,13 @@
 package me.interair.lexer.mr;
 
 import lombok.extern.slf4j.Slf4j;
+import me.interair.lexer.mr.eval.EvalVisitor;
+import me.interair.lexer.mr.eval.Value;
 import org.antlr.v4.runtime.*;
+import org.junit.Assert;
 import org.junit.Test;
+
+import static org.hamcrest.Matchers.equalTo;
 
 @Slf4j
 public class MrParserTest {
@@ -23,6 +28,7 @@ public class MrParserTest {
         EvalVisitor visitor = new EvalVisitor();
         Value visit = visitor.visit(parse.mrFile());
         log.info("result: {}", visit);
+        Assert.assertThat(visit.asLong(), equalTo(4L));
     }
 
     private MrParser parse(String query) {

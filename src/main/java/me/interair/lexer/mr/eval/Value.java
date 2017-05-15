@@ -1,4 +1,4 @@
-package me.interair.lexer.mr;
+package me.interair.lexer.mr.eval;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,24 +11,28 @@ public class Value {
 
     private final Object value;
 
-    public static Value doubleFromString(String d) {
+    public static Value buildDouble(String d) {
         return new Value(Double.valueOf(d));
     }
 
-    public static Value longFromString(String i) {
+    public static Value buildLong(String i) {
         return new Value(Integer.valueOf(i));
     }
 
-    public boolean asBoolean() {
-        return (boolean) value;
+    public static Value buildBoolean(String i) {
+        return new Value(Boolean.valueOf(i));
     }
 
-    public double asDouble() {
-        return (double) value;
+    public Boolean asBoolean() {
+        return (Boolean) value;
     }
 
-    public long asLong() {
-        return (long) value;
+    public Double asDouble() {
+        return (Double) value;
+    }
+
+    public Long asLong() {
+        return (Long) value;
     }
 
     public String asString() {
