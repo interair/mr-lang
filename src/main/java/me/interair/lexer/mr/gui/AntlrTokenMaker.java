@@ -17,9 +17,7 @@ class AntlrTokenMaker extends TokenMakerBase {
 
     @Override
     public Token getTokenList(Segment text, int initialTokenType, int startOffset) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        if (text == null) { throw new IllegalArgumentException("text can't be null"); }
         Lexer lexer = antlrLexerFactory.create(text.toString());
         List<org.antlr.v4.runtime.Token> tokens = new LinkedList<>();
         while (!lexer._hitEOF) {

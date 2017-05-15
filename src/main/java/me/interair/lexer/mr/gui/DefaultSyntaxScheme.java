@@ -6,9 +6,9 @@ import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 
 import java.awt.*;
 
-class MrSyntaxScheme extends SyntaxScheme {
+class DefaultSyntaxScheme extends SyntaxScheme {
 
-    public MrSyntaxScheme() {
+    public DefaultSyntaxScheme() {
         super(true);
     }
 

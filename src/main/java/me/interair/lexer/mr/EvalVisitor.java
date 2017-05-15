@@ -1,7 +1,5 @@
 package me.interair.lexer.mr;
 
-import org.antlr.v4.runtime.tree.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,10 +24,15 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
         Value right = this.visit(ctx.right);
         switch (ctx.operator.getType()) {
             case MrParser.PLUS:
-                return left.isDouble() || right.isDouble() ?
-                        new Value(left.asDouble() + right.asDouble()) :
-                        new Value(left.asInteger() + right.asInteger());
-
+                return new Value(left.asDouble() + right.asDouble());
+            case MrParser.MINUS:
+                return new Value(left.asDouble() - right.asDouble());
+            case MrParser.POWER:
+                return new Value(Math.pow(left.asDouble(), right.asDouble()));
+            case MrParser.ASTERISK:
+                return new Value(left.asDouble() * right.asDouble());
+            case MrParser.DIVISION:
+                return new Value(left.asDouble() / right.asDouble());
         }
 
         return visitChildren(ctx);
@@ -37,11 +40,12 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
 
     @Override
     public Value visitIntLiteral(MrParser.IntLiteralContext ctx) {
-        return new Value(Integer.valueOf(ctx.getText()));
+        return Value.integerFromString(ctx.getText());
     }
+
     @Override
     public Value visitDecimalLiteral(MrParser.DecimalLiteralContext ctx) {
-        return new Value(Double.valueOf(ctx.getText()));
+        return Value.doubleFromString(ctx.getText());
     }
 
 }

@@ -11,16 +11,24 @@ public class Value {
 
     private final Object value;
 
-    public Boolean asBoolean() {
-        return (Boolean) value;
+    public static Value doubleFromString(String d) {
+        return new Value(Double.valueOf(d));
     }
 
-    public Double asDouble() {
-        return (Double) value;
+    public static Value integerFromString(String i) {
+        return new Value(Integer.valueOf(i));
     }
 
-    public Integer asInteger() {
-        return (Integer) value;
+    public boolean asBoolean() {
+        return (boolean) value;
+    }
+
+    public double asDouble() {
+        return (double) value;
+    }
+
+    public long asLong() {
+        return (long) value;
     }
 
     public String asString() {

@@ -16,19 +16,19 @@ import java.net.URL;
 import java.util.List;
 
 @Slf4j
-public class TextEditorMr extends JFrame {
+public class TextEditor extends JFrame {
 
     private final static Color BACKGROUND = new Color(39, 40, 34);
     private final static Color BACKGROUND_SUBTLE_HIGHLIGHT = new Color(49, 50, 44);
 
-    public TextEditorMr() {
+    public TextEditor() {
 
-        JPanel cp = new JPanel(new BorderLayout());
+        final JPanel cp = new JPanel(new BorderLayout());
 
         RTextScrollPane sp = new RTextScrollPane(makeTextPanel(new LanguageSupport() {
             @Override
             public SyntaxScheme getSyntaxScheme() {
-                return new MrSyntaxScheme();
+                return new DefaultSyntaxScheme();
             }
 
             @Override
@@ -53,7 +53,7 @@ public class TextEditorMr extends JFrame {
     }
 
     private RSyntaxTextArea makeTextPanel(LanguageSupport languageSupport, String initialContext) {
-        RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+        final RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
 
         ((RSyntaxDocument) textArea.getDocument()).setSyntaxStyle(new AntlrTokenMaker(languageSupport.getAntlrLexerFactory()));
 
