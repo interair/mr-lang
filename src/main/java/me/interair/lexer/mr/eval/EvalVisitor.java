@@ -39,6 +39,13 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
     }
 
     @Override
+    public Value visitPrint(MrParser.PrintContext ctx) {
+        Value value = this.visit(ctx.expression());
+        System.out.println(value.getValue());
+        return value;
+    }
+
+    @Override
     public Value visitIntLiteral(MrParser.IntLiteralContext ctx) {
         return Value.buildLong(ctx.getText());
     }

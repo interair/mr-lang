@@ -16,7 +16,7 @@ public class Value {
     }
 
     public static Value buildLong(String i) {
-        return new Value(Integer.valueOf(i));
+        return new Value(Long.valueOf(i));
     }
 
     public static Value buildBoolean(String i) {
@@ -28,11 +28,11 @@ public class Value {
     }
 
     public Double asDouble() {
-        return (Double) value;
+        return ((Number) value).doubleValue();
     }
 
     public Long asLong() {
-        return (Long) value;
+        return ((Number) value).longValue();
     }
 
     public String asString() {

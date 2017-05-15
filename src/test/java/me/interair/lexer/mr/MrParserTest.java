@@ -24,7 +24,7 @@ public class MrParserTest {
 
     @Test
     public void testCalcSum() {
-        MrParser parse = parse("var a = 4 + 4 ");
+        MrParser parse = parse("print( 4 + 4 )");
         EvalVisitor visitor = new EvalVisitor();
         Value visit = visitor.visit(parse.mrFile());
         log.info("result: {}", visit);
