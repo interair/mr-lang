@@ -37,7 +37,7 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
 
     @Override
     public Value visitIntLiteral(MrParser.IntLiteralContext ctx) {
-        return Value.integerFromString(ctx.getText());
+        return Value.longFromString(ctx.getText());
     }
 
     @Override

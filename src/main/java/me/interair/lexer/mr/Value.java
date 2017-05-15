@@ -15,7 +15,7 @@ public class Value {
         return new Value(Double.valueOf(d));
     }
 
-    public static Value integerFromString(String i) {
+    public static Value longFromString(String i) {
         return new Value(Integer.valueOf(i));
     }
 
