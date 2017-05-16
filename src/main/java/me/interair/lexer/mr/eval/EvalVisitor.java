@@ -5,6 +5,8 @@ import me.interair.lexer.mr.MrParserBaseVisitor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 public class EvalVisitor extends MrParserBaseVisitor<Value> {
 
@@ -17,6 +19,16 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
         Value value = this.visit(ctx.expression());
         memory.put(id, value);
         return value;
+    }
+
+    @Override
+    protected Value aggregateResult(Value prev, Value nextResult) {
+        return nextResult != null ? nextResult : prev;
+    }
+
+    @Override
+    public Value visitParenExpression(MrParser.ParenExpressionContext ctx) {
+        return this.visit(ctx.expression());
     }
 
     public Value visitBinaryOperation(MrParser.BinaryOperationContext ctx) {
@@ -36,6 +48,14 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
         }
 
         return visitChildren(ctx);
+    }
+
+
+    @Override
+    public Value visitRange(MrParser.RangeContext ctx) {
+        Value left = this.visit(ctx.left);
+        Value right = this.visit(ctx.right);
+        return new Value(LongStream.range(left.asLong(), right.asLong()).boxed().collect(Collectors.toList()));
     }
 
     @Override
