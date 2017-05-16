@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static java.util.Arrays.asList;
+import static org.antlr.v4.runtime.CharStreams.fromString;
 import static org.hamcrest.Matchers.equalTo;
 
 @Slf4j
@@ -56,21 +57,13 @@ public class MrParserTest {
         Assert.assertThat(visit.asLong(), equalTo(16L));
     }
 
-    private MrParser printTree(String query) {
-        MrLexer lexer = new MrLexer(CharStreams.fromString(query));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        MrParser parser = new MrParser(tokens);
-        AstPrinter astPrinter = new AstPrinter();
-        astPrinter.print(parser.mrFile());
-        return parser;
+    private void printTree(String query) {
+        CommonTokenStream tokens = new CommonTokenStream(new MrLexer(fromString(query)));
+        new AstPrinter().print(new MrParser(tokens).mrFile());
     }
 
     private Value parse(String query) {
-        MrLexer lexer = new MrLexer(CharStreams.fromString(query));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        MrParser parser = new MrParser(tokens);
-        EvalVisitor visitor = new EvalVisitor();
-        Value visit = visitor.visit(parser.mrFile());
-        return visit;
+        CommonTokenStream tokens = new CommonTokenStream(new MrLexer(fromString(query)));
+        return new EvalVisitor().visit(new MrParser(tokens).mrFile());
     }
 }
