@@ -3,13 +3,16 @@ package me.interair.lexer.mr;
 import lombok.extern.slf4j.Slf4j;
 import me.interair.lexer.mr.eval.EvalVisitor;
 import me.interair.lexer.mr.eval.Value;
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 
 @Slf4j
@@ -23,6 +26,13 @@ public class MrParserTest {
     @Test
     public void testPrintReduce() {
         printTree("var pi = 4 * reduce(sequence, 0, x y -> x + y) ");
+    }
+
+    @Test
+    public void testMap() {
+        Value visit = parse("var sequence = map({0,5}, i -> (2 * i + 1))");
+        log.info("result: {}", visit);
+        Assert.assertThat(visit.getValue(), equalTo(asList(1D, 3D, 5D, 7D, 9D)));
     }
 
     @Test

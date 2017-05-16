@@ -14,7 +14,8 @@ statement : varDeclaration # varDeclarationStatement
 varDeclaration : VAR assignment ;
 
 print : PRINT LPAREN expression RPAREN ;
-map : MAP LPAREN from=expression COMMA ID LAMBDA to=expression RPAREN ;
+lambda : ID+ LAMBDA to=expression;
+map   : MAP LPAREN source=expression COMMA lambda RPAREN ;
 
 assignment : ID ASSIGN expression
            | ID ASSIGN statement;
@@ -24,7 +25,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression      
            | left=expression operator=(PLUS|MINUS) right=expression                      # binaryOperation
            | left=expression operator=POWER right=expression                             # binaryOperation
            | LPAREN expression RPAREN                                                    # parenExpression
-           | LRANGE left=expression COMMA right=expression RRANGE                                   # range
+           | LRANGE left=expression COMMA right=expression RRANGE                        # range
            | REDUCE LPAREN ID COMMA (INTLIT|DECLIT) COMMA ID ID LAMBDA expression RPAREN # reduceStatement
            | ID                                                                          # varReference
            | MINUS expression                                                            # minusExpression
