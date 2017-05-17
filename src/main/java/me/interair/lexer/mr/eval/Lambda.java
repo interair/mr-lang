@@ -1,11 +1,13 @@
 package me.interair.lexer.mr.eval;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
-@AllArgsConstructor
+@lombok.Value
+@Builder
 public class Lambda {
 
     private final Supplier<Value> expression;

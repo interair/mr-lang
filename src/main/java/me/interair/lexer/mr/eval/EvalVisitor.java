@@ -3,10 +3,10 @@ package me.interair.lexer.mr.eval;
 import lombok.extern.slf4j.Slf4j;
 import me.interair.lexer.mr.MrParser;
 import me.interair.lexer.mr.MrParserBaseVisitor;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
@@ -54,7 +54,8 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
         return visitChildren(ctx);
     }
 
-    @Override public Value visitVarReference(MrParser.VarReferenceContext ctx) {
+    @Override
+    public Value visitVarReference(MrParser.VarReferenceContext ctx) {
         return new Value(ctx.ID().getSymbol().getText());
     }
 
@@ -87,9 +88,13 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
     @Override
     public Value visitLambda(MrParser.LambdaContext ctx) {
         int size = ctx.ID().size();
-        Lambda lambda = new Lambda(() -> visit(ctx.expression()), memory, ctx.ID(0).getSymbol().getText(),
-                size == 2 ? ctx.ID(1).getSymbol().getText() : null);
-        return new Value(lambda);
+        Assert.isTrue(size > 0, "count of id params can't be less then 1");
+        return new Value(Lambda.builder()
+                .context(memory)
+                .expression(() -> visit(ctx.expression()))
+                .inputVar(ctx.ID(0).getSymbol().getText())
+                .outputVar(size == 2 ? ctx.ID(1).getSymbol().getText() : null)
+                .build());
     }
 
     @Override
