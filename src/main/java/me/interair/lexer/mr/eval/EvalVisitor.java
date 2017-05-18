@@ -64,7 +64,7 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitRange(MrParser.RangeContext ctx) {
+    public Value visitRangeExpression(MrParser.RangeExpressionContext ctx) {
         Value left = visit(ctx.left);
         Value right = visit(ctx.right);
         return new Value(LongStream.range(left.asLong(), right.asLong()).boxed().collect(Collectors.toList()));
@@ -83,6 +83,15 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
         Value lambda = visit(ctx.lambda());
         Object collect = source.asCollection().stream().map(v -> lambda.asLambda().apply(v)).collect(Collectors.toList());
         return new Value(collect);
+    }
+
+    @Override
+    public Value visitReduceStatement(MrParser.ReduceStatementContext ctx) {
+        Value value = memory.get(ctx.source.getText());
+        Value lambda = visit(ctx.lambda());
+        lambda.asLambda().setOutputVarVal(Double.parseDouble(ctx.initVal.getText()));
+        value.asCollection().forEach(v -> lambda.asLambda().apply(v));
+        return lambda.asLambda().getOutputVarVal();
     }
 
     @Override

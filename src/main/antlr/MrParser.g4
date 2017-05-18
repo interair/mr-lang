@@ -25,8 +25,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression      
            | left=expression operator=(PLUS|MINUS) right=expression                      # binaryOperation
            | left=expression operator=POWER right=expression                             # binaryOperation
            | LPAREN expression RPAREN                                                    # parenExpression
-           | LRANGE left=expression COMMA right=expression RRANGE                        # range
-           | REDUCE LPAREN ID COMMA (INTLIT|DECLIT) COMMA ID ID LAMBDA expression RPAREN # reduceStatement
+           | LRANGE left=expression COMMA right=expression RRANGE                        # rangeExpression
+           | REDUCE LPAREN source=ID COMMA initVal=(INTLIT|DECLIT) COMMA lambda RPAREN   # reduceStatement
            | ID                                                                          # varReference
            | MINUS expression                                                            # minusExpression
            | INTLIT                                                                      # intLiteral

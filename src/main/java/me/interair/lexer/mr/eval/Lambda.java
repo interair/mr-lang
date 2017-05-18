@@ -1,6 +1,5 @@
 package me.interair.lexer.mr.eval;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.Map;
@@ -16,9 +15,34 @@ public class Lambda {
     private final String outputVar;
 
     public Object apply(Object val) {
-        context.put(inputVar, new Value(val));
+        setInputVarVal(val);
         Value result = expression.get();
-        context.put(outputVar, result);
+        removeInputVar();
+        setOutputVarVal(result);
         return result.getValue();
+    }
+
+    private void removeInputVar() {
+        context.remove(inputVar);
+    }
+
+    public void setInputVarVal(Object val) {
+        context.put(inputVar, wrap(val));
+    }
+
+    public void setOutputVarVal(Object val) {
+        context.put(outputVar, wrap(val));
+    }
+
+    public Value getOutputVarVal() {
+        return context.get(outputVar);
+    }
+
+    private Value wrap(Object val) {
+        if (val instanceof Value) {
+            return (Value) val;
+        } else {
+            return new Value(val);
+        }
     }
 }

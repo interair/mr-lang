@@ -30,6 +30,14 @@ public class MrParserTest {
     }
 
     @Test
+    public void testMapReduce() {
+        Value visit = parse("var sequence = map({0,5}, i -> (i + 1)) \n" +
+                " var pi = 4 * reduce(sequence, 0, x y -> x + y) ");
+        log.info("result: {}", visit);
+        Assert.assertThat(visit.getValue(), equalTo(60D));
+    }
+
+    @Test
     public void testMap() {
         Value visit = parse("var sequence = map({0,5}, i -> (2 * i + 1))");
         log.info("result: {}", visit);
