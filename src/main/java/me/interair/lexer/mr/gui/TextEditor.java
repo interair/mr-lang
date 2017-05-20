@@ -2,18 +2,26 @@ package me.interair.lexer.mr.gui;
 
 import lombok.extern.slf4j.Slf4j;
 import me.interair.lexer.mr.MrLexer;
+import me.interair.lexer.mr.MrParser;
+import me.interair.lexer.mr.eval.EvalVisitor;
+import me.interair.lexer.mr.eval.Value;
 import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.parser.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.net.URL;
 import java.util.List;
+
+import static org.antlr.v4.runtime.CharStreams.fromString;
 
 @Slf4j
 public class TextEditor extends JFrame {
@@ -24,8 +32,8 @@ public class TextEditor extends JFrame {
     public TextEditor() {
 
         final JPanel cp = new JPanel(new BorderLayout());
-
-        RTextScrollPane sp = new RTextScrollPane(makeTextPanel(new LanguageSupport() {
+        JLabel statusLabel = new JLabel();
+        RSyntaxTextArea rSyntaxTextArea = makeTextPanel(new LanguageSupport() {
             @Override
             public SyntaxScheme getSyntaxScheme() {
                 return new DefaultSyntaxScheme();
@@ -38,30 +46,42 @@ public class TextEditor extends JFrame {
 
             @Override
             public Validator getValidator() {
-                return new Validator.EverythingOkValidator();
+                return new MrValidator();
             }
 
-        }, ""));
+        }, statusLabel);
+        RTextScrollPane sp = new RTextScrollPane(rSyntaxTextArea);
         cp.add(sp);
 
-        setContentPane(cp);
-        setTitle("Text Editor Demo");
+        setLayout(new BorderLayout());
+
+        JPanel statusPanel = new JPanel();
+        statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        add(statusPanel, BorderLayout.SOUTH);
+        statusPanel.setPreferredSize(new Dimension(getWidth(), 16));
+        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
+
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        statusPanel.add(statusLabel);
+
+        add(cp, BorderLayout.CENTER);
+        setTitle("Text Editor");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
 
     }
 
-    private RSyntaxTextArea makeTextPanel(LanguageSupport languageSupport, String initialContext) {
+    private RSyntaxTextArea makeTextPanel(LanguageSupport languageSupport, JLabel statusLabel) {
         final RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
 
         ((RSyntaxDocument) textArea.getDocument()).setSyntaxStyle(new AntlrTokenMaker(languageSupport.getAntlrLexerFactory()));
 
         textArea.setSyntaxScheme(languageSupport.getSyntaxScheme());
-        textArea.setText(initialContext);
         textArea.setCodeFoldingEnabled(true);
         textArea.setBackground(BACKGROUND);
         textArea.setForeground(Color.WHITE);
+        textArea.setAnimateBracketMatching(true);
         textArea.setCurrentLineHighlightColor(BACKGROUND_SUBTLE_HIGHLIGHT);
         textArea.addParser(new Parser() {
             @Override
@@ -76,22 +96,34 @@ public class TextEditor extends JFrame {
 
             @Override
             public boolean isEnabled() {
-                return false;
+                return true;
             }
 
             @Override
             public ParseResult parse(RSyntaxDocument doc, String style) {
+                DefaultParseResult parseResult = new DefaultParseResult(this);
                 try {
-                    List<Issue> issues = languageSupport.getValidator().validate(doc.getText(0, doc.getLength()));
-                    DefaultParseResult parseResult = new DefaultParseResult(this);
-                    issues.forEach(it ->
-                            parseResult.addNotice(new DefaultParserNotice(this,
-                                    it.getMessage(), it.getLine(), it.getOffset(), it.getLength())));
-                    return parseResult;
-                } catch (BadLocationException e) {
+                    String text = doc.getText(0, doc.getLength());
+                    if (StringUtils.hasText(text)) {
+                        List<Issue> issues = languageSupport.getValidator().validate(text);
+                        issues.forEach(it ->
+                                parseResult.addNotice(new DefaultParserNotice(this,
+                                        it.getMessage(), it.getLine(), it.getOffset(), it.getLength())));
+                        if (CollectionUtils.isEmpty(issues)) {
+                            CommonTokenStream tokens = new CommonTokenStream(new MrLexer(fromString(text)));
+                            MrParser.MrFileContext mrFileContext = new MrParser(tokens).mrFile();
+                            Value visit = new EvalVisitor().visit(mrFileContext);
+                            statusLabel.setText(visit.asString());
+                        } else {
+                            statusLabel.setText(issues.toString());
+                        }
+                    }
+
+                } catch (Exception e) {
                     log.error("", e);
-                    throw new RuntimeException(e);
+                    parseResult.setError(e);
                 }
+                return parseResult;
             }
         });
 

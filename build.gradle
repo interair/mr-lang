@@ -13,7 +13,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'antlr'
 
 
-group 'io.pronto.langsandbox'
+group 'me.interair.lexer'
 version '1.0-SNAPSHOT'
 
 tasks.withType(JavaCompile) {
@@ -34,7 +34,7 @@ jar {
 }
 
 bootRepackage {
-    mainClass = 'me.pronto.Application'
+    mainClass = 'me.interair.lexer.mr.Application'
 }
 
 dependencies {

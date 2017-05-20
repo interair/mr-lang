@@ -21,9 +21,9 @@ assignment : ID ASSIGN expression
            | ID ASSIGN statement;
 
 
-expression : left=expression operator=(DIVISION|ASTERISK) right=expression               # binaryOperation
+expression : left=expression operator=POWER right=expression                             # binaryOperation
+           | left=expression operator=(DIVISION|ASTERISK) right=expression               # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression                      # binaryOperation
-           | left=expression operator=POWER right=expression                             # binaryOperation
            | LPAREN expression RPAREN                                                    # parenExpression
            | LRANGE left=expression COMMA right=expression RRANGE                        # rangeExpression
            | REDUCE LPAREN source=ID COMMA initVal=(INTLIT|DECLIT) COMMA lambda RPAREN   # reduceStatement

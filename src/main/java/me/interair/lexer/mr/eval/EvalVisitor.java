@@ -67,7 +67,7 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
     public Value visitRangeExpression(MrParser.RangeExpressionContext ctx) {
         Value left = visit(ctx.left);
         Value right = visit(ctx.right);
-        return new Value(LongStream.range(left.asLong(), right.asLong()).boxed().collect(Collectors.toList()));
+        return new Value(LongStream.range(resolveVar(left).longValue(), resolveVar(right).longValue()).boxed().collect(Collectors.toList()));
     }
 
     @Override
@@ -77,6 +77,7 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
         return value;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Value visitMap(MrParser.MapContext ctx) {
         Value source = visit(ctx.source);
@@ -85,6 +86,13 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
         return new Value(collect);
     }
 
+    @Override
+    public Value visitMinusExpression(MrParser.MinusExpressionContext ctx) {
+        Value value = visitChildren(ctx);
+        return new Value(-value.asDouble());
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public Value visitReduceStatement(MrParser.ReduceStatementContext ctx) {
         Value value = memory.get(ctx.source.getText());

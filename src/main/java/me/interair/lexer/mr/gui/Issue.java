@@ -1,17 +1,17 @@
 package me.interair.lexer.mr.gui;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@Builder
 class Issue {
-    private IssueType issueType;
-    private String message;
-    private int line;
-    private int offset;
-    private int length;
+    private final IssueType issueType;
+    private final String message;
+    private final int line;
+    private final int offset;
+    private final int length;
 
 }

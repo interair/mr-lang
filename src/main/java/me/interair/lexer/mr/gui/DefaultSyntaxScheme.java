@@ -30,18 +30,22 @@ class DefaultSyntaxScheme extends SyntaxScheme {
                 break;
             case MrLexer.INTLIT:
             case MrLexer.DECLIT:
-                color = Color.BLUE;
+                color = new Color(255, 252, 3);
                 break;
             case MrLexer.ID:
-                color = Color.MAGENTA;
+                color = new Color(81, 253, 255);
                 break;
+            case MrLexer.COMMA:
             case MrLexer.LPAREN:
             case MrLexer.RPAREN:
                 color = Color.WHITE;
                 break;
+            case MrLexer.MAP:
+                color = new Color(154, 117, 255);
+            case MrLexer.REDUCE:
+                break;
             case MrLexer.UNMATCHED:
                 color = Color.RED;
-                break;
         }
         if (color != null) {
             style.foreground = color;

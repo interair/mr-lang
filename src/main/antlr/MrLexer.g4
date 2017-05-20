@@ -19,9 +19,9 @@ DECLIT             : '0'|[1-9][0-9]* '.' [0-9]+ ;
 // Operators
 PLUS               : '+' ;
 MINUS              : '-' ;
-POWER              : '^' ;
 ASTERISK           : '*' ;
 DIVISION           : '/' ;
+POWER              : '^' ;
 ASSIGN             : '=' ;
 LPAREN             : '(' ;
 RPAREN             : ')' ;

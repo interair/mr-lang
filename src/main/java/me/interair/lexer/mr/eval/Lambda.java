@@ -26,7 +26,7 @@ public class Lambda {
         context.remove(inputVar);
     }
 
-    public void setInputVarVal(Object val) {
+    private void setInputVarVal(Object val) {
         context.put(inputVar, wrap(val));
     }
 
