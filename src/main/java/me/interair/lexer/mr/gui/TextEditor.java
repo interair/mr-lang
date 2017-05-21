@@ -2,11 +2,11 @@ package me.interair.lexer.mr.gui;
 
 import lombok.extern.slf4j.Slf4j;
 import me.interair.lexer.mr.MrLexer;
-import me.interair.lexer.mr.MrParser;
-import me.interair.lexer.mr.eval.EvalVisitor;
-import me.interair.lexer.mr.eval.Value;
+import me.interair.lexer.mr.eval.Evaluator;
+import me.interair.lexer.mr.eval.Issue;
+import me.interair.lexer.mr.eval.MrEvaluator;
+import me.interair.lexer.mr.eval.Result;
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
@@ -17,17 +17,17 @@ import org.springframework.util.StringUtils;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.net.URL;
 import java.util.List;
-
-import static org.antlr.v4.runtime.CharStreams.fromString;
 
 @Slf4j
 public class TextEditor extends JFrame {
 
     private final static Color BACKGROUND = new Color(39, 40, 34);
     private final static Color BACKGROUND_SUBTLE_HIGHLIGHT = new Color(49, 50, 44);
+    private final Evaluator evaluator = new MrEvaluator();
 
     public TextEditor() {
 
@@ -103,17 +103,14 @@ public class TextEditor extends JFrame {
             public ParseResult parse(RSyntaxDocument doc, String style) {
                 DefaultParseResult parseResult = new DefaultParseResult(this);
                 try {
-                    String text = doc.getText(0, doc.getLength());
+                    String text = getText(doc);
                     if (StringUtils.hasText(text)) {
                         List<Issue> issues = languageSupport.getValidator().validate(text);
-                        issues.forEach(it ->
-                                parseResult.addNotice(new DefaultParserNotice(this,
-                                        it.getMessage(), it.getLine(), it.getOffset(), it.getLength())));
+                        issues.forEach(it -> parseResult.addNotice(new DefaultParserNotice(this,
+                                it.getMessage(), it.getLine(), it.getOffset(), it.getLength())));
                         if (CollectionUtils.isEmpty(issues)) {
-                            CommonTokenStream tokens = new CommonTokenStream(new MrLexer(fromString(text)));
-                            MrParser.MrFileContext mrFileContext = new MrParser(tokens).mrFile();
-                            Value visit = new EvalVisitor().visit(mrFileContext);
-                            statusLabel.setText(visit.asString());
+                            Result evaluate = evaluator.evaluate(text);
+                            statusLabel.setText(evaluate.getValue().asString());
                         } else {
                             statusLabel.setText(issues.toString());
                         }
@@ -124,6 +121,15 @@ public class TextEditor extends JFrame {
                     parseResult.setError(e);
                 }
                 return parseResult;
+            }
+
+            private String getText(RSyntaxDocument doc) {
+                try {
+                    return doc.getText(0, doc.getLength());
+                } catch (BadLocationException e) {
+                    log.error("Can't fetch text", e);
+                    return null;
+                }
             }
         });
 

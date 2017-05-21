@@ -1,4 +1,4 @@
-package me.interair.lexer.mr.gui;
+package me.interair.lexer.mr.eval;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-class Issue {
+public class Issue {
     private final IssueType issueType;
     private final String message;
     private final int line;
