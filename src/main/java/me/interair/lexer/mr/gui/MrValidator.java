@@ -38,8 +38,7 @@ public class MrValidator implements Validator {
                                 int line, int charPositionInLine,
                                 String msg, RecognitionException e) {
 
-            Issue issue = Issue.builder().line(line).message(msg).offset(charPositionInLine).issueType(IssueType.ERROR).build();
-            issues.add(issue);
+            issues.add(Issue.builder().line(line).message(msg).offset(charPositionInLine).issueType(IssueType.ERROR).build());
         }
     }
 }
