@@ -14,6 +14,7 @@ java -jar mr-lang-1.0-SNAPSHOT.jar
 ```
 
 ## UI
-![status code with result](https://github.com/interair/mr-lang/master/doc/img/pi.png)
+![status code with result](https://raw.githubusercontent.com/interair/mr-lang/master/doc/img/pi.png)
 
-![status code with error](https://github.com/interair/mr-lang/master/doc/img/error.png)
+
+![status code with error](https://raw.githubusercontent.com/interair/mr-lang/master/doc/img/error.png)
