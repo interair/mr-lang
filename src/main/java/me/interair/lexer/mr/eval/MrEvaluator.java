@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.interair.lexer.mr.MrLexer;
 import me.interair.lexer.mr.MrParser;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +26,12 @@ public class MrEvaluator implements Evaluator {
         MrParser mrParser = new MrParser(tokens);
         mrParser.removeErrorListeners();
         mrParser.addErrorListener(errorListener);
-        try {
-            Value visit = new EvalVisitor().visit(mrParser.mrFile());
-            return result.value(visit).build();
-        } catch (Exception e) {
-            log.error("", e);
-            return result.exception(e).build();
+        MrParser.MrFileContext mrFileContext = mrParser.mrFile();
+        if (CollectionUtils.isEmpty(issues)) {
+            Value visit = new EvalVisitor().visit(mrFileContext);
+            result.value(visit);
         }
+        return result.build();
     }
 
     @AllArgsConstructor
@@ -47,12 +44,14 @@ public class MrEvaluator implements Evaluator {
                                 int line, int charPositionInLine,
                                 String msg, RecognitionException e) {
 
+            CommonToken commonToken = (CommonToken) offendingSymbol;
+            int tokenIndex = commonToken.getTokenIndex();
             issues.add(Issue.builder()
                     .line(line)
                     .message(msg)
-                    .offset(charPositionInLine)
+                    .offset(tokenIndex)
                     .issueType(IssueType.ERROR)
-                    .length(1)
+                    .length(charPositionInLine - tokenIndex)
                     .build());
         }
     }

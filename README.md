@@ -18,3 +18,6 @@ java -jar mr-lang-1.0-SNAPSHOT.jar
 
 
 ![status code with error](https://raw.githubusercontent.com/interair/mr-lang/master/doc/img/error.png)
+
+
+![status code with error](https://raw.githubusercontent.com/interair/mr-lang/master/doc/img/error2.png)

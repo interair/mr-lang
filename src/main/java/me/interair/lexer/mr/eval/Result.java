@@ -12,5 +12,4 @@ import java.util.List;
 public class Result {
     private final Value value;
     private final List<Issue> issues;
-    private final Exception exception;
 }
