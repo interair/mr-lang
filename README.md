@@ -8,7 +8,7 @@ var sequence = map({0,n}, i -> (-1)^i / (2 * i + 1))
 var pi = 4 * reduce(sequence, 0, x y -> x+y)
 ```
 
-For getting UI run:
+Start string:
 ```
 java -jar mr-lang-1.0-SNAPSHOT.jar
 ```
