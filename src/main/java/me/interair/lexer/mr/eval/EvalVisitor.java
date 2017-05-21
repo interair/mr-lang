@@ -73,7 +73,7 @@ public class EvalVisitor extends MrParserBaseVisitor<Value> {
     @Override
     public Value visitPrint(MrParser.PrintContext ctx) {
         Value value = visit(ctx.expression());
-        System.out.println(value.getValue());
+        System.out.println(resolveVar(value));
         return value;
     }
 

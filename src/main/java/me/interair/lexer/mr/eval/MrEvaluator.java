@@ -44,14 +44,18 @@ public class MrEvaluator implements Evaluator {
                                 int line, int charPositionInLine,
                                 String msg, RecognitionException e) {
 
+
+            MrParser parser = (MrParser) recognizer;
+            int start = parser.getContext().getStart().getStartIndex();
             CommonToken commonToken = (CommonToken) offendingSymbol;
-            int tokenIndex = commonToken.getTokenIndex();
+            int stop = commonToken.getStopIndex();
+            int length = stop - start + 1;
             issues.add(Issue.builder()
                     .line(line)
                     .message(msg)
-                    .offset(tokenIndex)
+                    .offset(start)
                     .issueType(IssueType.ERROR)
-                    .length(charPositionInLine - tokenIndex)
+                    .length(length)
                     .build());
         }
     }
